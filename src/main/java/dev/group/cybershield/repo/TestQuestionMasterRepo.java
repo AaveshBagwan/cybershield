@@ -1,6 +1,7 @@
 package dev.group.cybershield.repo;
 
 import dev.group.cybershield.quiz.model.TestQuestionMap;
+import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -18,6 +19,7 @@ public interface TestQuestionMasterRepo extends JpaRepository<TestQuestionMap,In
 
     String setUserAnswerIdByTestIdAndQuestionIdQuery = "update test_question_map set users_answer_id = :ansId, updated_on = :updatedOn  where test_id= :testId and question_id = :questionId";
     @Modifying
+    @Transactional
     @Query(value=setUserAnswerIdByTestIdAndQuestionIdQuery,nativeQuery = true)
     void setUserAnswerIdByTestIdAndQuestionId(@Param("ansId")Integer ansId, @Param("testId") Integer testId, @Param("questionId") Integer questionId, @Param("updatedOn") LocalDateTime updatedOn);
 }

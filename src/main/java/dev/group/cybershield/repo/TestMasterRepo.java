@@ -1,6 +1,7 @@
 package dev.group.cybershield.repo;
 
 import dev.group.cybershield.entity.TestMaster;
+import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -18,6 +19,7 @@ public interface TestMasterRepo extends JpaRepository<TestMaster,Integer> {
 
     String saveScoreAndCompleteTestQuery="update test_master set score=:score, updated_on= :updatedOn where test_id = :testId ";
     @Modifying
+    @Transactional
     @Query(value=saveScoreAndCompleteTestQuery,nativeQuery = true)
     void saveScoreCompleteTest(@Param("score") int score, @Param("updatedOn") LocalDateTime updatedOn, @Param("testId") Integer testId);
 }

@@ -1,9 +1,8 @@
 package dev.group.cybershield.quiz.service;
 
-import dev.group.cybershield.quiz.model.QuizReq;
-import dev.group.cybershield.quiz.model.GetTestResponseDTO;
-import dev.group.cybershield.quiz.model.SubmitTestReq;
-import dev.group.cybershield.quiz.model.SubmitTestRes;
+import dev.group.cybershield.quiz.model.*;
+
+import java.util.List;
 
 public interface QuizService {
 
@@ -17,4 +16,7 @@ public interface QuizService {
     //submit Test Services:
     public SubmitTestRes getScore(SubmitTestReq reqBody) throws Exception;
 
+
+    //view Test Services:
+    List<ViewTestResponseDTO> viewTest(QuizReq reqBody);
 }
