@@ -2,10 +2,7 @@ package dev.group.cybershield.quiz.controller;
 
 import dev.group.cybershield.common.global.ResponseDTO;
 import dev.group.cybershield.common.utils.ResponseUtil;
-import dev.group.cybershield.quiz.model.QuizReq;
-import dev.group.cybershield.quiz.model.GetTestResponseDTO;
-import dev.group.cybershield.quiz.model.SubmitTestReq;
-import dev.group.cybershield.quiz.model.SubmitTestRes;
+import dev.group.cybershield.quiz.model.*;
 import dev.group.cybershield.quiz.service.QuizServiceImp;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,13 +10,16 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Slf4j
 @RestController
+@RequestMapping("/quiz")
 public class QuizController {
 
     @Autowired
@@ -31,7 +31,7 @@ public class QuizController {
             String endPoint = "getTest";
             Timestamp landingTime = Timestamp.valueOf(LocalDateTime.now());
             GetTestResponseDTO response = quizService.getTestData(reqBody);
-            log.info("gtTest_API " + response);
+            log.info("gtTest_API {}", response);
             return ResponseUtil.sendResponse(response, landingTime, HttpStatus.OK, 200, "Successfully" , endPoint);
         } catch (Exception e) {
             log.error("unable to load test questions by getTest_API: {}", e.getMessage());
@@ -45,7 +45,7 @@ public class QuizController {
             String endPoint = "submitTest";
             Timestamp landingTime = Timestamp.valueOf(LocalDateTime.now());
             SubmitTestRes response = quizService.getScore(reqBody);
-            log.info("submitTest_API " + response);
+            log.info("submitTest_API {} ", response);
             return ResponseUtil.sendResponse(response, landingTime, HttpStatus.OK, 200, "Successfully" , endPoint);
         } catch (Exception e) {
             log.error("submitTest_API_error: {}", e.getMessage());
@@ -58,11 +58,11 @@ public class QuizController {
         try{
             String endPoint = "viewTest";
             Timestamp landingTime = Timestamp.valueOf(LocalDateTime.now());
-            GetTestResponseDTO response = quizService.getTestData(reqBody);
-            log.info("fetched data from database " + response);
+            List<ViewTestResponseDTO> response = quizService.viewTest(reqBody);
+            log.info("fetched data from database {}", response);
             return ResponseUtil.sendResponse(response, landingTime, HttpStatus.OK, 200, "Successfully" , endPoint);
         } catch (Exception e) {
-            log.error("unable to load test questions by getTest_API: {}", e.getMessage());
+            log.error("unable to load test questions by viewTest_API: {}", e.getMessage());
             throw e;
         }
     }

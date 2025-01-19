@@ -212,4 +212,40 @@ public class QuizServiceImp implements  QuizService {
         }
     }
 
+    //view Test Services:
+    @Override
+    public List<ViewTestResponseDTO> viewTest(QuizReq reqBody) {
+        try{
+            log.info("ViewTest Service Request Body {}",reqBody);
+            List<ViewTestResponseDTO> userQueAnsList = new ArrayList<ViewTestResponseDTO>();
+            List<TestQuestionMap> questionMaps = new ArrayList<TestQuestionMap>();
+            questionMaps =testQuestionMasterRepo.findByTestId(reqBody.getTestId());
+            for(TestQuestionMap questionMap: questionMaps ){
+                ViewTestResponseDTO userQueAns = new ViewTestResponseDTO();
+                List<OptionDTO> options =new ArrayList<OptionDTO>();
+                Questions que= new Questions();
+                que= quizQuesRepo.findById(questionMap.getQuestionId()).get();
+                List<Answers> answers= new ArrayList<Answers>();
+                answers=quizAnsRepo.findByQuestionId(questionMap.getQuestionId());
+                userQueAns.setQuestionId(questionMap.getTestId());
+                userQueAns.setQuestionName(que.getDescription());
+                userQueAns.setSelectedOptionId(questionMap.getUsersAnswerId());
+                for(Answers ans: answers) {
+                    if (ans.getIsCorrect().equalsIgnoreCase("Y")) {
+                        userQueAns.setCorrectOptionId(ans.getId());
+                    }
+                    OptionDTO option = new OptionDTO();
+                    option.setOptionId(ans.getId());
+                    option.setOption(ans.getAnswers());
+                    options.add(option);
+                }
+                userQueAns.setOptions(options);
+                userQueAnsList.add(userQueAns);
+            }
+            return userQueAnsList;
+        } catch (Exception e) {
+            log.error("ViewTest Service Error {}",e.getMessage());
+            throw e;
+        }
+        }
 }
