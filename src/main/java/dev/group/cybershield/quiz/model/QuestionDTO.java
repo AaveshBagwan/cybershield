@@ -17,7 +17,6 @@ public class QuestionDTO {
 
     private Integer correctOptionId;
 
-    @NotNull(message = "selectedOptionId is mandatory", groups = {QuizDTO.SubmitQuizGroup.class})
     private Integer selectedOptionId;
 
     private List<OptionDTO> options;

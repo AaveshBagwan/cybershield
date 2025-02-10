@@ -22,7 +22,7 @@ public class QuizDTO {
 
     private String grade;
 
-    @NotEmpty(message = "questionList is mandatory", groups = {SubmitQuizGroup.class})
+    @NotEmpty(message = "questionsList is mandatory", groups = {SubmitQuizGroup.class})
     private List<@Valid QuestionDTO> questionsList;
 
     public interface GetQuizGroup {

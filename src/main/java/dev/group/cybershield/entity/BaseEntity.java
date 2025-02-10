@@ -13,13 +13,13 @@ import java.time.LocalDateTime;
 public class BaseEntity {
 
     @Column(name = "status")
-    private String status;
+    public String status;
 
     @Column(name = "created_on")
-    private LocalDateTime createdOn;
+    public LocalDateTime createdOn;
 
     @Column(name = "updated_on")
-    private LocalDateTime updatedOn;
+    public LocalDateTime updatedOn;
 
     @PrePersist
     public void onCreation() {

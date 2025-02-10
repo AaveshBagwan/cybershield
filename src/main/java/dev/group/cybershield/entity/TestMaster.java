@@ -13,19 +13,19 @@ public class TestMaster extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "test_id")
-    private Integer testId;
+    public Integer testId;
 
     @Column(name = "user_id")
-    private Integer userId;
+    public Integer userId;
 
-    private Integer score; // can be null
+    public Integer score; // can be null
 
-    private String category;
+    public String category;
 
-    private String level;
+    public String level;
 
     @Column(name = "test_status")
-    private String testStatus;
+    public String testStatus;
 
 
 }

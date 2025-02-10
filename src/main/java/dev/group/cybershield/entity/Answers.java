@@ -14,15 +14,15 @@ public class Answers extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "answer_id")
-    private Integer answerId;
+    public Integer answerId;
 
     @Column(name = "answer")
-    private String answer;
+    public String answer;
 
     @Column(name = "question_id")
-    private Integer questionId;
+    public Integer questionId;
 
     @Column(name = "is_correct")
-    private String isCorrect;
+    public String isCorrect;
 
 }

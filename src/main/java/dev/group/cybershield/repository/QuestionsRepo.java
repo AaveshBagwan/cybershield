@@ -12,10 +12,10 @@ import java.util.Optional;
 @Repository
 public interface QuestionsRepo extends JpaRepository<Questions, Integer> {
 
-    String randomQuestionQuery = "SELECT * FROM Question_Master WHERE status = 'A' ORDER BY RANDOM() LIMIT :count";
+    String randomQuestionQuery = "SELECT * FROM Question_Master WHERE status = 'A' ORDER BY RANDOM() LIMIT  ?";
 
     @Query(value = randomQuestionQuery, nativeQuery = true)
-    List<Questions> getRandomQuestions(@Param("count") int count);
+    List<Questions> getRandomQuestions( int count);
 
     Optional<Questions> findByQuestionId(Integer questionId);
 }

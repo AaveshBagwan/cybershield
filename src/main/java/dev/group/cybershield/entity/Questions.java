@@ -13,19 +13,19 @@ public class Questions extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "question_id")
-    private Integer questionId;
+    public Integer questionId;
 
     @Column(name = "question")
-    private String question;
+    public String question;
 
     @Column(name = "category")
-    private String category;
+    public String category;
 
     @Column(name = "level")
-    private String level;
+    public String level;
 
     @Column(name = "description")
-    private String description;
+    public String description;
 
 
 }

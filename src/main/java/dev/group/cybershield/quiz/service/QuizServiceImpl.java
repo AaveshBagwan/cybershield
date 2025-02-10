@@ -38,19 +38,19 @@ public class QuizServiceImpl implements QuizService {
     @Autowired
     private UsersRepo usersRepo;
 
-    @Value("number.of.question.in.quiz")
-    private int quizQuestionsCount;
+    @Value("${number.of.question.in.quiz}")
+    private Integer quizQuestionsCount;
 
     @Override
     public QuizDTO getQuiz(QuizDTO reqBody) throws Exception {
         try {
-            log.info("getQuiz_Service_userId : {}", reqBody.userId);
+            log.info("getQuiz_Service_userId : {}", reqBody.getUserId());
             QuizDTO quiz;
-            List<TestMaster> unattemptedQuizForUser = testMasterRepo.findByUserIdAndTestStatusAndStatus(reqBody.userId, QuizConstants.TEST_STATUS_INIT, CommonConstants.STATUS_A);
+            List<TestMaster> unattemptedQuizForUser = testMasterRepo.findByUserIdAndTestStatusAndStatus(reqBody.getUserId(), QuizConstants.TEST_STATUS_INIT, CommonConstants.STATUS_A);
             if (unattemptedQuizForUser != null && !unattemptedQuizForUser.isEmpty()) {
                 quiz = findQuizById(unattemptedQuizForUser.get(0).getTestId(), false);
             } else {
-                quiz = generateQuiz(reqBody.userId);
+                quiz = generateQuiz(reqBody.getUserId());
             }
             return quiz;
         } catch (Exception e) {
@@ -70,6 +70,12 @@ public class QuizServiceImpl implements QuizService {
                     ()-> {throw new BadRequestException("User does not exist !");}
             );
 
+            // generateQuiz from QUESTIONS
+            List<QuestionDTO> questionDTOList = new ArrayList<>();
+            List<Questions> questionList = questionsRepo.getRandomQuestions(quizQuestionsCount);
+            List<Integer> questionIds = questionList.stream().map(Questions::getQuestionId).toList();
+            List<Answers> answersListForAllQuestions = answersRepo.findByQuestionIdInAndStatus(questionIds, CommonConstants.STATUS_A);
+
             // saveQuiz in TEST_MASTER
             TestMaster quizMaster = new TestMaster();
             quizMaster.setUserId(userId);
@@ -79,11 +85,6 @@ public class QuizServiceImpl implements QuizService {
             quiz.setTestId(savedQuiz.getTestId());
             log.info("generateQuiz_Service userId:{} and testId:{} ", userId, savedQuiz.getTestId());
 
-            // generateQuiz from QUESTIONS
-            List<QuestionDTO> questionDTOList = new ArrayList<>();
-            List<Questions> questionList = questionsRepo.getRandomQuestions(quizQuestionsCount);
-            List<Integer> questionIds = questionList.stream().map(Questions::getQuestionId).toList();
-            List<Answers> answersListForAllQuestions = answersRepo.findByQuestionIdInAndStatus(questionIds, CommonConstants.STATUS_A);
 
             for (Questions question : questionList) {
                 QuestionDTO questionDTO = new QuestionDTO();
