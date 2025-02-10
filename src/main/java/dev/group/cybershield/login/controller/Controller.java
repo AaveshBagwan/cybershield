@@ -25,13 +25,13 @@ public class Controller {
     UserServices userServices;
 
     @PostMapping(path = "/v1.0/verifyUser")
-    public ResponseEntity<ResponseDTO> verifyUser(@RequestBody UserDTO reqBody){
-        try{
+    public ResponseEntity<ResponseDTO> verifyUser(@RequestBody UserDTO reqBody) {
+        try {
             String endPoint = "verifyUser";
             Timestamp landingTime = Timestamp.valueOf(LocalDateTime.now());
             Boolean response = userServices.verifyUser(reqBody);
             log.info("verifyUserAPI " + response);
-            return ResponseUtil.sendResponse(response, landingTime, HttpStatus.OK, 200, "Successfully" , endPoint);
+            return ResponseUtil.sendResponse(response, landingTime, HttpStatus.OK, endPoint);
         } catch (Exception e) {
             log.error("unable to verify User by verifyUser_API: {}", e.getMessage());
             throw e;

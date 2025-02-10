@@ -1,11 +1,10 @@
-package dev.group.cybershield.quiz;
+package dev.group.cybershield;
 
-import dev.group.cybershield.common.constants.Constants;
 import dev.group.cybershield.common.exception.BadRequestException;
 import dev.group.cybershield.common.global.ResponseDTO;
 import dev.group.cybershield.common.utils.ResponseUtil;
 import dev.group.cybershield.entity.Questions;
-import dev.group.cybershield.repository.QuestionRepo;
+import dev.group.cybershield.repository.QuestionsRepo;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +14,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,28 +24,28 @@ import java.util.Optional;
 public class TestController {
 
     @Autowired
-    private QuestionRepo questionRepo;
+    private QuestionsRepo questionsRepo;
 
     @PostMapping("/v1.0/getQuestion")
     public ResponseEntity<ResponseDTO> getQuestions(@RequestBody Questions request) {
         String endPoint = "getQuestions";
         Timestamp landingTime = Timestamp.valueOf(LocalDateTime.now());
 
-        if(request.getId() == null) {
+        if (request.getQuestionId() == null) {
             throw new BadRequestException("Id is mandatory");
         }
 
-        Optional<Questions> questionData = questionRepo.findById(request.getId());
+        Optional<Questions> questionData = questionsRepo.findById(request.getQuestionId());
         log.info("fetched data from database " + questionData.get());
-        return ResponseUtil.sendResponse(questionData.get(), landingTime, HttpStatus.OK, 200, Constants.SUCCESS, endPoint);
+        return ResponseUtil.sendResponse(questionData.get(), landingTime, HttpStatus.OK, endPoint);
     }
 
     @GetMapping("/v1.0/getAllQuestions")
-    public ResponseEntity<ResponseDTO>  getAllQuestions(){
+    public ResponseEntity<ResponseDTO> getAllQuestions() {
         String endPoint = "getAllQuestions";
         Timestamp landingTime = Timestamp.valueOf(LocalDateTime.now());
-        List<Questions> allQuestions = questionRepo.findAll();
-        return ResponseUtil.sendResponse(allQuestions , landingTime, HttpStatus.OK, 200, Constants.SUCCESS , endPoint);
+        List<Questions> allQuestions = questionsRepo.findAll();
+        return ResponseUtil.sendResponse(allQuestions, landingTime, HttpStatus.OK, endPoint);
     }
-    
+
 }
