@@ -5,8 +5,7 @@ import lombok.Data;
 
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class ResponseDTO {
-    private ResponseMessage responseMessage;
-    private Object responseData;
-    private ErrorData errorData;
+public class ErrorData {
+    private String errorCode;
+    private Object errorMessage;
 }

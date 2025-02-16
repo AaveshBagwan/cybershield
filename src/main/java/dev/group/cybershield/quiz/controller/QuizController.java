@@ -2,12 +2,13 @@ package dev.group.cybershield.quiz.controller;
 
 import dev.group.cybershield.common.global.ResponseDTO;
 import dev.group.cybershield.common.utils.ResponseUtil;
-import dev.group.cybershield.quiz.model.*;
-import dev.group.cybershield.quiz.service.QuizServiceImp;
+import dev.group.cybershield.quiz.model.QuizDTO;
+import dev.group.cybershield.quiz.service.QuizService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,61 +16,51 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Slf4j
 @RestController
 @RequestMapping("/quiz")
+@RequiredArgsConstructor
 public class QuizController {
 
-    @Autowired
-    QuizServiceImp quizService;
+    private final QuizService quizService;
 
-    @PostMapping("/v1.0/getTest")
-    public ResponseEntity<ResponseDTO> getTest(@RequestBody QuizReq reqBody) throws Exception {
-        try{
+    @PostMapping("/v1.0/getQuiz")
+    public ResponseEntity<ResponseDTO> getQuiz(@RequestBody @Validated({QuizDTO.GetQuizGroup.class}) QuizDTO reqBody) throws Exception {
+        try {
             String endPoint = "getTest";
             Timestamp landingTime = Timestamp.valueOf(LocalDateTime.now());
-
-            if(reqBody.getUserId() == null ) {
-                throw new Exception("UserId are mandatory");
-            }
-
-            if(reqBody.getTestId() == null ) {
-                throw new Exception("TestId are mandatory");
-            }
-
-            GetTestResponseDTO response = quizService.getTestData(reqBody);
+            QuizDTO response = quizService.getQuiz(reqBody);
             log.info("gtTest_API {}", response);
-            return ResponseUtil.sendResponse(response, landingTime, HttpStatus.OK, 200, "Successfully" , endPoint);
+            return ResponseUtil.sendResponse(response, landingTime, HttpStatus.OK, endPoint);
         } catch (Exception e) {
-            log.error("unable to load test questions by getTest_API: {}", e.getMessage());
+            log.error("unable_to_load_test_getTest_API: {}", e.getMessage());
             throw e;
         }
     }
 
-    @PostMapping("/v1.0/submitTest")
-    public ResponseEntity<ResponseDTO> submitTest(@RequestBody SubmitTestReq reqBody) throws Exception {
-        try{
+    @PostMapping("/v1.0/submitQuiz")
+    public ResponseEntity<ResponseDTO> submitQuiz(@RequestBody @Validated({QuizDTO.SubmitQuizGroup.class}) QuizDTO reqBody) throws Exception {
+        try {
             String endPoint = "submitTest";
             Timestamp landingTime = Timestamp.valueOf(LocalDateTime.now());
-            SubmitTestRes response = quizService.getScore(reqBody);
+            QuizDTO response = quizService.submitQuiz(reqBody);
             log.info("submitTest_API {} ", response);
-            return ResponseUtil.sendResponse(response, landingTime, HttpStatus.OK, 200, "Successfully" , endPoint);
+            return ResponseUtil.sendResponse(response, landingTime, HttpStatus.OK, endPoint);
         } catch (Exception e) {
             log.error("submitTest_API_error: {}", e.getMessage());
             throw e;
         }
     }
 
-    @PostMapping("/v1.0/viewTest")
-    public ResponseEntity<ResponseDTO> viewTest(@RequestBody QuizReq reqBody) throws Exception {
-        try{
+    @PostMapping("/v1.0/viewQuiz")
+    public ResponseEntity<ResponseDTO> viewQuiz(@RequestBody @Validated QuizDTO reqBody) throws Exception {
+        try {
             String endPoint = "viewTest";
             Timestamp landingTime = Timestamp.valueOf(LocalDateTime.now());
-            List<ViewTestResponseDTO> response = quizService.viewTest(reqBody);
-            log.info("fetched data from database {}", response);
-            return ResponseUtil.sendResponse(response, landingTime, HttpStatus.OK, 200, "Successfully" , endPoint);
+            QuizDTO response = quizService.findQuizById(reqBody.getTestId(), true);
+            log.info("viewTest_API {}", response);
+            return ResponseUtil.sendResponse(response, landingTime, HttpStatus.OK, endPoint);
         } catch (Exception e) {
             log.error("unable to load test questions by viewTest_API: {}", e.getMessage());
             throw e;

@@ -10,21 +10,21 @@ import java.util.Base64;
 
 @Slf4j
 public class SecurityUtil {
-    public static final String symmetricKey="5/CnXPJP/8ndR8D7OoV8Bc8xlqymfX31vRxrm1zeavQ=";
+    public static final String symmetricKey = "5/CnXPJP/8ndR8D7OoV8Bc8xlqymfX31vRxrm1zeavQ=";
     public static final String symmetricAlgoWithPadding = "AES/ECB/PKCS5Padding";
     public static final String symmetricAlgo = "AES";
 
-    public static String symmetricEncrypt(String data){
+    public static String symmetricEncrypt(String data) {
         String returnData = data;
         try {
             Cipher cp = Cipher.getInstance(symmetricAlgoWithPadding);
             byte[] decodedKey = Base64.getDecoder().decode(symmetricKey);
-            SecretKey secretKey = new SecretKeySpec(decodedKey,symmetricAlgo);
+            SecretKey secretKey = new SecretKeySpec(decodedKey, symmetricAlgo);
             cp.init(Cipher.ENCRYPT_MODE, secretKey);
             byte[] encryptedData = cp.doFinal(data.getBytes());
             returnData = Base64.getEncoder().encodeToString(encryptedData);
-        } catch (Exception e){
-            log.error("symmetricEncrypt_error : "+e.getMessage()+"\n stacktrace : ");
+        } catch (Exception e) {
+            log.error("symmetricEncrypt_error : " + e.getMessage() + "\n stacktrace : ");
             e.printStackTrace();
         }
         return returnData;
@@ -51,7 +51,7 @@ public class SecurityUtil {
 
 
     public static void main(String[] args) {
-       String encryptedData =  symmetricEncrypt("helloMyNameIsCyberShield");
+        String encryptedData = symmetricEncrypt("helloMyNameIsCyberShield");
         System.out.println("encryptedData: " + encryptedData);
 
         String decrptedData = symmetricDecrypt(encryptedData);

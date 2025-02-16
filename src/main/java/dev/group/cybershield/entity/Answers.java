@@ -1,37 +1,28 @@
 package dev.group.cybershield.entity;
 
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
-import java.time.LocalDateTime;
-
+@EqualsAndHashCode(callSuper = true)
 @Data
 @Entity
-@Table(name="answer_master")
-public class Answers {
+@Table(name = "answer_master")
+public class Answers extends BaseEntity {
+
     @Id
-    @Column(name="answer_id")
-    private Integer id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "answer_id")
+    public Integer answerId;
 
-    @Column(name="answer")
-    private String answers;
+    @Column(name = "answer")
+    public String answer;
 
-    @Column(name="question_id")
-    private Integer questionId;
+    @Column(name = "question_id")
+    public Integer questionId;
 
-    @Column(name="is_correct")
-    private String isCorrect;
+    @Column(name = "is_correct")
+    public String isCorrect;
 
-    @Column(name="status")
-    private String status;
-
-    @Column(name="created_on")
-    private LocalDateTime createdOn;
-
-    @Column(name="updated_on")
-    private LocalDateTime updatedOn;
 }

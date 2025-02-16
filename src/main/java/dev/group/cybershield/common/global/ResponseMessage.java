@@ -1,6 +1,7 @@
 package dev.group.cybershield.common.global;
 
 import lombok.Data;
+import org.springframework.http.HttpStatus;
 
 import java.sql.Timestamp;
 
@@ -8,7 +9,7 @@ import java.sql.Timestamp;
 public class ResponseMessage {
     private Timestamp landingTime;
     private Timestamp responseTime;
-    private String message;
-    private long status;
-    private long httpStatus;
+    private String status;
+    private HttpStatus httpStatus;
+    private String endpoint;
 }
